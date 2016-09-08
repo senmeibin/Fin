@@ -1,9 +1,175 @@
-<#import "../layout/defaultLayout.ftl.html" as layout> 
-<@layout.myLayout "Home page">    
+<#import "../layout/defaultLayout.ftl.html" as layout>
+<@layout.myLayout "Home page">
 
+<h1 align="center">主页</h1>
+<div class="row" style="max-width:330px;padding:15px;margin:0 auto;">
+  <div class="col-xs-4">
+    <button id="last_year" class="btn btn-link">上一年</button>
+  </div>
+  <div class="col-xs-4">
+    <label id="this_year">${year}</label>
+  </div>
+  <div class="col-xs-4">
+    <button id="next_year" class="btn btn-link">下一年</button>
+  </div>
+</div>
+<form id="form1" action="/" method="get">
+  <input type="hidden" id="request_year" name="year" value="" />
+</form>
+<#if (dto.fn01SumList)??>
+<table class="table table-bordered table-striped" style="max-width:330px;padding:15px;margin:0 auto;">
+  <thead>
+    <tr>
+      <th>年月</th>
+      <th>支出合计</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  <#list dto.fn01SumList as fn01Sum>
+    <tr>
+      <td>${fn01Sum.ym}</td>
+      <td>${fn01Sum.sumAmount}</td>
+      <td><a href="/fn01.html?search_ym=${fn01Sum.ym}">查看</a></td>
+    </tr>
+  </#list>
+  </tbody>
+</table>
+<div id="chartArea" style="max-width:330px;padding:15px;margin:0 auto;">
+  <canvas id="myChart"></canvas>
+</div>
+<br>
+<table class="table table table-bordered table-striped" style="max-width:330px;padding:15px;margin:0 auto;">
+  <tbody>
+    <tr>
+      <td>月支出合计</td>
+      <td id="totalMonthlyAmount">${dto.totalMonthlyAmount}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>特殊支出合计</td>
+      <td id="totalSpecailAmount">${dto.totalSpecailAmount}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>年收</td>
+      <td id="income">${dto.income}</td>
+      <td>
+        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#changeIncomeDialog">修改</button>
+      </td>
+    </tr>
+    <tr>
+      <td>结余</td>
+      <td id="balance">${dto.balance}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+  <!-- change income dialog -->
+  <div class="modal fade" id="changeIncomeDialog" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">${year}年收</h4>
+        </div>
+          <div class="modal-body">
+            <div class="col-xs-offset-1 col-xs-10">
+              <form id= "dlg_form" role="form" data-toggle="validator">
+                <input type="hidden" name="year" value=${year}>
+                <div class="form-group">
+                  <label for="dlg_itemName">年收</label>
+                    <input type="number" class="form-control"
+                        id="dlg_amount" name="amount" placeholder="年收（￥）" value=${dto.income} min="0" max="99999999" data-error="请输入8位以内数字" required/>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">保存</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+<#else>
+<p align="center">没有月支出记录</p>
+</#if>
 
-<h1>${i18n("hello.world")}</h1>
-<p>${i18n("hello.world.json")}</p>
-<a href="/hello_world.json">Hello World Json</a>
+<script type="text/javascript" src="/assets/webjars/jquery/2.1.3/jquery.js"></script>
+<script type="text/javascript" src="/assets/webjars/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/bootstrap-validator-master/dist/validator.min.js"></script>
+<script type="text/javascript" src="/assets/Chartjs/Chart.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$( "#last_year" ).click(function() {
+			var year = parseInt($( "#this_year" ).text())-1;
+			$( "#request_year" ).val(year);
+			$( "#form1" ).submit();
+		});
+		$( "#next_year" ).click(function() {
+			var year = parseInt($( "#this_year" ).text())+1;
+			$( "#request_year" ).val(year);
+			$( "#form1" ).submit();
+		});
+<#if (dto.fn01SumList)??>
+		var labelArray = new Array();
+		var dataArray = new Array();
+	<#list dto.fn01SumList as fn01Sum>
+		labelArray.push(${fn01Sum.ym});
+		dataArray.push(${fn01Sum.sumAmount});
+	</#list>
+		var colors = ["#4B0082","#00BFFF","#00CED1","#228B22","#7CFC00","#9400D3","#B22222","#FF00FF","#E9967A","#FA8072","#D2B48C","#696969"];
+		var data = {
+				labels: labelArray,
+			         datasets: [
+			             {
+			            	 label:"各月支出",
+			            	 data: dataArray,
+			                 backgroundColor: colors,
+			                 hoverBackgroundColor: colors
+			             }]
+			     };
+		var ctx = $("#myChart");
+		var myPieChart = new Chart(ctx,{
+		    type: 'bar',
+		    data: data
+		});
+		$('#chartArea').show();
 
+		$('#dlg_form').validator().on('submit', function (e) {
+			  if (e.isDefaultPrevented()) {
+			    // handle the invalid form...
+			    // do nothing
+			  } else {
+			    // everything looks good!
+			    // Prevent form submission
+              e.preventDefault();
+
+			    // ajax submit
+			    data = $('#dlg_form').serialize();
+			    $.post("fn04_update.json", data, function(data){
+			    	$("#income").text(data.amount);
+			    	var v1 = parseInt($('#totalMonthlyAmount').text());
+			    	var v2 = parseInt($('#totalSpecailAmount').text());
+			    	var v3 = data.amount-v1-v2;
+			    	$('#balance').text(v3);
+			    	$('#changeIncomeDialog').modal('hide');
+					$('#dlg_form')[0].reset();
+					$('#dlg_amount').val(data.amount);
+			    })
+			      .fail(function() {
+			        alert( "提交表单失败了！" );
+			      })
+			      .always(function() {
+			    },"json");
+			  }
+		})
+</#if>
+	});
+</script>
 </@layout.myLayout>

@@ -49,6 +49,8 @@ public class Fn01Dao {
 		try{
 			List<Fn01Dto> ret= new ArrayList<Fn01Dto>();
 			EntityManager entityManager = entitiyManagerProvider.get();
+			entityManager.createQuery("DELETE FROM Fn01Record x WHERE x.ym=:ym")
+										.setParameter("ym", ym).executeUpdate();
 			TypedQuery<Fn03Record> query= entityManager.createQuery(
 					"SELECT x FROM Fn03Record x Where x.displayFlag='Y' ORDER BY x.seq", Fn03Record.class);
 			List<Fn03Record> fn03recs= query.getResultList();

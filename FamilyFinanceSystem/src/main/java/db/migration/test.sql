@@ -1,0 +1,1 @@
+delete fn04record where year='2016'

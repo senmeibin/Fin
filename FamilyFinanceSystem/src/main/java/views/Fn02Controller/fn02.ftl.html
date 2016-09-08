@@ -3,7 +3,7 @@
 
 
 <h1 align="center">${i18n("menu.FN02")}</h1>
-  <form id= "search_form" class="form-inline" role="form" style="max-width:300px;padding:15px;margin:0 auto;" data-toggle="validator">
+  <form id= "search_form" class="form-inline" role="form" style="max-width:330px;padding:15px;margin:0 auto;" data-toggle="validator">
   <div class="form-group">
     <div class="input-group">
       <input name='search_year' id='search_year' type="number" class="form-control" placeholder="年份（yyyy）" min="1000" max="9999" data-error="请正确输入年份（yyyy）" required>
@@ -13,19 +13,28 @@
     </div>
     <div class="help-block with-errors"></div>
    </div>
-
-
   </form>
-  <form id= "form1" class="form-horizontal" style="max-width:400px;padding:15px;margin:0 auto;" data-toggle="validator" role="form">
+  <form id= "form1" class="form-horizontal" style="max-width:330px;padding:15px;margin:0 auto;" data-toggle="validator" role="form">
     <input type="hidden" name="header_year" id="header_year">
-    <div  id="itemList">
-    </div>
-    <br>
-    <div id="countArea" class="form-group">
-      <table class="table">
+    <div id="title_year_area" class="form-group" align="left">
+      <table>
         <tbody>
           <tr>
-            <td>支出总计（￥）</td>
+            <td><B>年份:</B></td>
+            <td id="title_year"></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+    </div>
+    <div  id="itemList">
+    </div>
+    <div id="countArea" class="form-group" align="left">
+      <hr>
+      <table>
+        <tbody>
+          <tr>
+            <td><b>支出总计（￥）:</b></td>
             <td id="totalAmount">0</td>
           </tr>
         </tbody>
@@ -74,6 +83,7 @@
 		$('#makePicBtn').show();
 		$('#totalAmount').text(countAmount());
 		$('#countArea').show();
+		$('#title_year_area').show();
     }
 
     function getNameValuesFromInput(){
@@ -100,6 +110,7 @@
     	// initialize list
     	$("#itemList").html("");
     	$('#countArea').hide();
+    	$('#title_year_area').hide();
     	// initialize chart
 		$('#chartArea').html("");
 		$('#chartArea').append('<canvas id="myChart"></canvas>');
@@ -156,6 +167,7 @@
         			initialize();
         			showResultDetail(data);
         			$('#header_year').val($('#search_year').val());
+        			$('#title_year').text($('#search_year').val());
 				});
 			  }
 		})

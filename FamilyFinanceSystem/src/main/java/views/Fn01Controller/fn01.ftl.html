@@ -13,18 +13,29 @@
     </div>
     <div class="help-block with-errors"></div>
    </div>
-
+  <br>
   </form>
   <form id= "form1" class="form-horizontal" style="max-width:330px;padding:15px;margin:0 auto;" data-toggle="validator" role="form">
     <input type="hidden" name="header_ym" id="header_ym">
-    <div  id="itemList">
-    </div>
-    <br>
-    <div id="countArea" class="form-group" align="right">
-      <table class="table">
+    <div id="title_ym_area" class="form-group" align="left">
+      <table>
         <tbody>
           <tr>
-            <td>支出总计（￥）</td>
+            <td><B>年月:</B></td>
+            <td id="title_ym"></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+    </div>
+    <div  id="itemList">
+    </div>
+    <div id="countArea" class="form-group" align="left">
+      <hr>
+      <table>
+        <tbody>
+          <tr>
+            <td><b>支出总计（￥）:</b></td>
             <td id="totalAmount">0</td>
           </tr>
         </tbody>
@@ -33,6 +44,7 @@
     <div align="right" class="btn-toolbar">
       <button id="saveBtn" type="submit" class="btn btn-info">保存</button>
       <button id="makePicBtn" type="button" class="btn btn-info">生成比例图</button>
+      <button id="initializeBtn" type="button" class="btn btn-info">重置支出项目</button>
     </div>
   </form>
     <div id="chartArea" style="max-width:600px;padding:15px;margin:0 auto;">
@@ -69,8 +81,10 @@
 		$("#itemList").validator('update');
 		$('#saveBtn').show();
 		$('#makePicBtn').show();
+		$('#initializeBtn').show();
 		$('#totalAmount').text(countAmount());
 		$('#countArea').show();
+		$('#title_ym_area').show();
     }
 
     function getNameValuesFromInput(){
@@ -93,9 +107,11 @@
     	// initialize button
     	$('#saveBtn').hide();
     	$('#makePicBtn').hide();
+    	$('#initializeBtn').hide();
     	// initialize list
     	$("#itemList").html("");
     	$('#countArea').hide();
+    	$('#title_ym_area').hide();
     	// initialize chart
 		$('#chartArea').html("");
 		$('#chartArea').append('<canvas id="myChart"></canvas>');
@@ -109,8 +125,7 @@
         return totalAmount;
     }
     // initialize search date
-	var d = new Date();
-	$('#search_ym').val(d.getFullYear() + ("00" + (d.getMonth()+1)).slice(-2)) ;
+	$('#search_ym').val(${search_ym});
 	initialize();
 
 	$(document).ready(function(){
@@ -149,6 +164,8 @@
 				var searchdata = $('#search_form').serialize();
         		$.post("fn01.json", searchdata,function(data){
         			initialize();
+        			$('#title_ym').text($('#search_ym').val());
+        			$('#header_ym').val($('#search_ym').val());
     				// display data if exists or new one if not
         			if(data.length>0){
         				showResultDetail(data);
@@ -156,7 +173,6 @@
         			    if (confirm("还没有这个月的记录。需要新建么？") == true) {
         				    $.post("fn01_new.json", searchdata, function(data){
         				    	showResultDetail(data);
-        						$('#header_ym').val($('#search_ym').val());
         				    })
         				      .fail(function() {
         				        alert( "新建数据失败了！" );
@@ -186,6 +202,21 @@
 			});
 			$('#chartArea').show();
 		});
+		$("#initializeBtn").click(function(){
+			if (confirm("现有的数据将会清除。确定重置么？") == true) {
+				var submitdata = $('#form1').serialize();
+			    $.post("fn01_new.json", submitdata, function(data){
+					initialize();
+			    	showResultDetail(data);
+			    })
+			      .fail(function() {
+			        alert( "重置数据失败了！" );
+			      })
+			      .always(function() {
+			    },"json");
+		    }
+		});
+
     });
   </script>
 </@layout.myLayout>

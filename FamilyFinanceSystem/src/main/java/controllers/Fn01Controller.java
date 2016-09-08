@@ -15,6 +15,9 @@
  */
 
 package controllers;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -30,18 +33,22 @@ public class Fn01Controller {
     @Inject
     Fn01Dao fn01Dao;
 
-    public Result fn01() {
-
-        return Results.html();
-
+    public Result fn01(@Param("search_ym") String search_ym) {
+    	if(search_ym == null){
+    		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+    		search_ym = sdf.format(new Date());
+    	}
+        return Results.html().render("search_ym",search_ym);
     }
 
     public Result fn01Json(@Param("search_ym") String search_ym) {
     	return Results.json().render(fn01Dao.search(search_ym));
     }
 
-    public Result fn01_newjson(@Param("search_ym") String search_ym) {
-    	return Results.json().render(fn01Dao.newRecords(search_ym));
+    public Result fn01_newjson(@Param("search_ym") String search_ym,
+    							@Param("header_ym") String header_ym) {
+    	String ym = (search_ym == null) ? header_ym : search_ym;
+    	return Results.json().render(fn01Dao.newRecords(ym));
     }
 
     public Result fn01SubmitAllItemsJson(Fn01DtoList fn01DtoList){

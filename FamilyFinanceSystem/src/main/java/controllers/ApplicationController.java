@@ -15,37 +15,38 @@
  */
 
 package controllers;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import dao.Fn03Dao;
+import dao.Fn00Dao;
+import models.Fn00Dto;
+import models.Fn04Record;
 import ninja.Result;
 import ninja.Results;
+import ninja.params.Param;
 
 
 @Singleton
 public class ApplicationController {
     @Inject
-    Fn03Dao fn03Dao;
+    Fn00Dao fn00Dao;
 
-    public Result index() {
+    public Result index(@Param("year") String year) {
 
-        return Results.html();
+    	if(year == null){
+    		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+    		year = sdf.format(new Date());
+    	}
 
+    	Fn00Dto dto= fn00Dao.search(year);
+        return Results.html().render("year",year).render("dto",dto);
     }
 
-    public Result helloWorldJson() {
-
-        SimplePojo simplePojo = new SimplePojo();
-        simplePojo.content = "Hello World! Hello Json!";
-
-        return Results.json().render(simplePojo);
-
-    }
-
-    public static class SimplePojo {
-
-        public String content;
-
+    public Result update(Fn04Record fn04Rec){
+    	fn00Dao.update(fn04Rec);
+		return Results.json().render(fn04Rec);
     }
 }
