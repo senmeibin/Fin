@@ -23,6 +23,7 @@ import controllers.ApplicationController;
 import controllers.Fn01Controller;
 import controllers.Fn02Controller;
 import controllers.Fn03Controller;
+import controllers.Fn04Controller;
 import ninja.AssetsController;
 import ninja.Router;
 import ninja.application.ApplicationRoutes;
@@ -31,7 +32,6 @@ public class Routes implements ApplicationRoutes {
     @Override
     public void init(Router router) {
         router.GET().route("/").with(ApplicationController.class, "index");
-        router.POST().route("/fn04_update.json").with(ApplicationController.class, "update");
 
         ///////////////////////////////////////////////////////////////////////
         // Fn03 route
@@ -55,6 +55,13 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/fn02.html").with(Fn02Controller.class, "fn02");
         router.POST().route("/fn02.json").with(Fn02Controller.class, "fn02Json");
         router.POST().route("/fn02_submitAllItems.json").with(Fn02Controller.class, "fn02SubmitAllItemsJson");
+
+        ///////////////////////////////////////////////////////////////////////
+        // Fn04 route
+        ///////////////////////////////////////////////////////////////////////
+        router.GET().route("/fn04.html").with(Fn04Controller.class, "fn04");
+        router.GET().route("/fn04.json").with(Fn04Controller.class, "fn04Json");
+        router.POST().route("/fn04_updateAll.json").with(Fn04Controller.class, "fn04UpdateAll");
 
         ///////////////////////////////////////////////////////////////////////
         // Assets (pictures / javascript)

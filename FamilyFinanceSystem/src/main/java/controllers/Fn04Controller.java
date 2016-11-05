@@ -15,32 +15,38 @@
  */
 
 package controllers;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import dao.Fn00Dao;
-import models.Fn00Dto;
+import dao.Fn04Dao;
+import models.Fn04Record;
 import ninja.Result;
 import ninja.Results;
 import ninja.params.Param;
 
 
 @Singleton
-public class ApplicationController {
+public class Fn04Controller {
     @Inject
-    Fn00Dao fn00Dao;
+    Fn04Dao fn04Dao;
 
-    public Result index(@Param("year") String year) {
+    public Result fn04() {
 
-    	if(year == null){
-    		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-    		year = sdf.format(new Date());
-    	}
+        return Results.html();
 
-    	Fn00Dto dto= fn00Dao.search(year);
-        return Results.html().render("year",year).render("dto",dto);
+    }
+
+    public Result fn04Json(@Param("search_year") String search_year) {
+    	List<Fn04Record> list = fn04Dao.search(search_year);
+        return Results.json().render(list);
+    }
+
+    public Result fn04UpdateAll(Fn04Record[] fn04Arr){
+    	List<Fn04Record> fn04RecList = Arrays.asList(fn04Arr);
+    	List<Fn04Record> list = fn04Dao.update(fn04RecList);
+    	return Results.json().render(list);
     }
 }

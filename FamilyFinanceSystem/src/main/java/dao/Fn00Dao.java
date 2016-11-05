@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -14,7 +12,7 @@ import com.google.inject.persist.Transactional;
 
 import models.Fn00Dto;
 import models.Fn00Dto.Fn01Sum;
-import models.Fn04Record;
+import models.Fn04SumRecord;
 import ninja.jpa.UnitOfWork;
 
 public class Fn00Dao {
@@ -49,18 +47,32 @@ public class Fn00Dao {
 					"SELECT SUM(amount) FROM fn02record WHERE year = :year")
 					.setParameter("year", year);
 			Object result2 = query.getSingleResult();
-			ret.setTotalSpecailAmount(Integer.parseInt(result2.toString()));
-			// set Income
-			TypedQuery<Fn04Record> query2= entityManager.createQuery(
-					"SELECT x FROM Fn04Record x WHERE x.year=:year", Fn04Record.class)
-					.setParameter("year", year);
-			try{
-				Fn04Record fn04rec= query2.getSingleResult();
-				ret.setIncome(fn04rec.getAmount());
+			if(result2!=null){
+				ret.setTotalSpecailAmount(Integer.parseInt(result2.toString()));
+			}else{
+				ret.setTotalSpecailAmount(0);
 			}
-			catch(NoResultException nrex){
+			// set Income
+			query = entityManager.createNativeQuery(
+					"SELECT SUM(amount) FROM fn04record WHERE year = :year")
+					.setParameter("year", year);
+			Object result4 = query.getSingleResult();
+			if(result4!=null){
+				ret.setIncome(Integer.parseInt(result4.toString()));
+			}else{
 				ret.setIncome(0);
 			}
+
+//			TypedQuery<Fn04SumRecord> query2= entityManager.createQuery(
+//					"SELECT x FROM Fn04SumRecord x WHERE x.year=:year", Fn04SumRecord.class)
+//					.setParameter("year", year);
+//			try{
+//				Fn04SumRecord fn04rec= query2.getSingleResult();
+//				ret.setIncome(fn04rec.getAmount());
+//			}
+//			catch(NoResultException nrex){
+//				ret.setIncome(0);
+//			}
 			// set balance
 			ret.setBalance();
 			return ret;
@@ -69,7 +81,7 @@ public class Fn00Dao {
 	}
 
 	@Transactional
-	public void update(Fn04Record fn04rec) {
+	public void update(Fn04SumRecord fn04rec) {
 		try{
 		    EntityManager entityManager = entitiyManagerProvider.get();
 		    entityManager.merge(fn04rec);

@@ -44,58 +44,21 @@
     <tr>
       <td>月支出合计</td>
       <td id="totalMonthlyAmount">${dto.totalMonthlyAmount}</td>
-      <td></td>
     </tr>
     <tr>
       <td>特殊支出合计</td>
       <td id="totalSpecailAmount">${dto.totalSpecailAmount}</td>
-      <td></td>
     </tr>
     <tr>
       <td>年收</td>
       <td id="income">${dto.income}</td>
-      <td>
-        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#changeIncomeDialog">修改</button>
-      </td>
     </tr>
     <tr>
       <td>结余</td>
       <td id="balance">${dto.balance}</td>
-      <td></td>
     </tr>
   </tbody>
 </table>
-  <!-- change income dialog -->
-  <div class="modal fade" id="changeIncomeDialog" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">${year}年收</h4>
-        </div>
-          <div class="modal-body">
-            <div class="col-xs-offset-1 col-xs-10">
-              <form id= "dlg_form" role="form" data-toggle="validator">
-                <input type="hidden" name="year" value=${year}>
-                <div class="form-group">
-                  <label for="dlg_itemName">年收</label>
-                    <input type="number" class="form-control"
-                        id="dlg_amount" name="amount" placeholder="年收（￥）" value=${dto.income} min="0" max="99999999" data-error="请输入8位以内数字" required/>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn btn-primary">保存</button>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
 <#else>
 <p align="center">没有月支出记录</p>
 </#if>
