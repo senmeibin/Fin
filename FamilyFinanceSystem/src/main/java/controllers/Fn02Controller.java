@@ -24,12 +24,15 @@ import dao.Fn02Dao;
 import models.Fn02Dto;
 import models.Fn02DtoList;
 import models.Fn02Record;
+import myFilters.SecureFilter;
+import ninja.FilterWith;
 import ninja.Result;
 import ninja.Results;
 import ninja.params.Param;
 
 
 @Singleton
+@FilterWith(SecureFilter.class)
 public class Fn02Controller {
     @Inject
     Fn02Dao fn02Dao;

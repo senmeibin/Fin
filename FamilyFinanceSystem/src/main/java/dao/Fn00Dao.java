@@ -63,16 +63,6 @@ public class Fn00Dao {
 				ret.setIncome(0);
 			}
 
-//			TypedQuery<Fn04SumRecord> query2= entityManager.createQuery(
-//					"SELECT x FROM Fn04SumRecord x WHERE x.year=:year", Fn04SumRecord.class)
-//					.setParameter("year", year);
-//			try{
-//				Fn04SumRecord fn04rec= query2.getSingleResult();
-//				ret.setIncome(fn04rec.getAmount());
-//			}
-//			catch(NoResultException nrex){
-//				ret.setIncome(0);
-//			}
 			// set balance
 			ret.setBalance();
 			return ret;

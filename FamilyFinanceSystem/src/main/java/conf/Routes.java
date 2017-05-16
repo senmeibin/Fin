@@ -31,7 +31,9 @@ import ninja.application.ApplicationRoutes;
 public class Routes implements ApplicationRoutes {
     @Override
     public void init(Router router) {
-        router.GET().route("/").with(ApplicationController.class, "index");
+    	router.GET().route("/login.html").with(ApplicationController.class, "login");
+    	router.GET().route("/checkLoginUser.json").with(ApplicationController.class, "checkLoginUser");
+        router.GET().route("/index.html").with(ApplicationController.class, "index");
 
         ///////////////////////////////////////////////////////////////////////
         // Fn03 route
@@ -72,7 +74,7 @@ public class Routes implements ApplicationRoutes {
         ///////////////////////////////////////////////////////////////////////
         // Index / Catchall shows index page
         ///////////////////////////////////////////////////////////////////////
-        router.GET().route("/.*").with(ApplicationController.class, "index");
+        router.GET().route("/.*").with(ApplicationController.class, "login");
     }
 
 }

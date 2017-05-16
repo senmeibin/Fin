@@ -23,12 +23,15 @@ import com.google.inject.Singleton;
 
 import dao.Fn01Dao;
 import models.Fn01DtoList;
+import myFilters.SecureFilter;
+import ninja.FilterWith;
 import ninja.Result;
 import ninja.Results;
 import ninja.params.Param;
 
 
 @Singleton
+@FilterWith(SecureFilter.class)
 public class Fn01Controller {
     @Inject
     Fn01Dao fn01Dao;

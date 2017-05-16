@@ -22,11 +22,14 @@ import dao.Fn03Dao;
 //import models.record.Fn03Record;
 import models.Fn03Record;
 import models.Fn03RecordList;
+import myFilters.SecureFilter;
+import ninja.FilterWith;
 import ninja.Result;
 import ninja.Results;
 
 
 @Singleton
+@FilterWith(SecureFilter.class)
 public class Fn03Controller {
     @Inject
     Fn03Dao fn03Dao;
@@ -50,4 +53,5 @@ public class Fn03Controller {
     	fn03Dao.update(fn03RecList.parseList());
     	return Results.json().render(fn03RecList);
     }
+
 }
