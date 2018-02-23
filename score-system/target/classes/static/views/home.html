@@ -1,0 +1,77 @@
+<h3>　　　</h3><!-- 第一行不能显示 原因不明 -->
+<h3 align="center">长城羽毛球俱乐部</h3>
+<div class="row" ng-init="init()">
+    <div class="col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">スケジュール</div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                        <th width="50%">日付</th>
+                        <th width="50%">時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="schedule in schedule_list">
+                        <td>{{schedule.training_date}}</td>
+                        <td>{{schedule.training_time}}</td>
+                        </tr>
+                   </tbody>
+               </table>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">会費について</div>
+            <div class="panel-body">
+                <ul>
+                <li>入会金：2000円</li>
+                <li>月会費：男性->2000円　 女性->1500円 </li>
+                <li>3ヶ月会費->5500円　女性->4000円</li>
+                <li>年会費：男性->20000円　女性->14000円</li>
+                <li>回数会費：4時間->800円　2時間->500円</li>
+                <li>遡って、納めた会費を返金したり振替したりすることはできません</li>
+                </ul>
+            </div>
+        </div>
+         <div class="panel panel-info">
+            <div class="panel-heading">倶楽部の紹介</div>
+            <div class="panel-body">
+                バドミントン倶楽部「長城」は、１９９９年ができた日本首都圏に勤務している中国人バドミントン愛好者の登録団体で、メンバーが20名ほど、ほとんどがIT関連の技術者です。休日を利用して、快い汗を共にかきながら、生活や仕事の情報を交換し、友情を深め、仕事のストレスを解消する場となっています。
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">アクセス案内</div>
+            <div class="panel-body">
+                <ul>
+                <li>場所：埼玉県川口市芝園町３丁目　芝園団地公民館１F</li>
+                <li>交通案内：京浜東北線　蕨駅西口より徒歩6分</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">デバイス認証</div>
+            <div class="panel-body" ng-show="!authkeyObj">
+                <div>このデバイスが未認証。認証すると、試合エントリ機能や管理機能が追加されます。</div>
+                <div>認証キーについて管理者に問い合わせしてください。</div>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="key" placeholder="認証キー">
+                    <span class="input-group-btn">
+                    <button class="btn btn-info" ng-click="registAuthkey()">認証</button>
+                    </span>
+                </div>
+            </div>
+            <div class="panel-body" ng-show="authkeyObj">
+                <div>このデバイスが認証済み。以下の機能を持っている。</div>
+                <ul >
+                    <li>ランキング参照機能</li>
+                    <li ng-show="authkeyObj.matchEntryAuth">試合エントリ機能</li>
+                    <li ng-show="authkeyObj.adminAuth">管理機能</li>
+                </ul>
+                <button class="btn btn-info btn-block" ng-click="cancelAuthkey()">認証取消</button>
+            </div>
+        </div>
+    </div>
+</div>

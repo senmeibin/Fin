@@ -1,0 +1,229 @@
+<h3>　　　</h3><!-- 第一行不能显示 原因不明 -->
+<h3 align="center">比赛记分</h3>
+<div ng-show="!authkeyObj.matchEntryAuth"><h2>没有权限</h2></div>
+<div class="row" ng-init="init()" ng-show="authkeyObj.matchEntryAuth">
+        <div class="col-md-4">
+            <h4>
+                <span class="label label-default">最近参加活动的会员</span>
+                <!-- Trigger the modal with a button -->
+			    <span><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#allMemberModal">所有会员</button></span>
+			    <span><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#addMemberModal">登陆会员</button></span>
+			</h4>
+			<!-- 所有会员Modal -->
+			<div id="allMemberModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog modal-lg">
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">所有会员</h4>
+			      </div>
+			      <div class="modal-body">
+		            <table class="table table-striped table-hover">
+		                <tbody>
+		                    <tr ng-repeat="allMemberRow in allMemberArr">
+		                        <td ng-repeat="allmember in allMemberRow" style="padding:5px 5px 5px 5px;width:90px;overflow: hidden">
+		                            {{allmember.id}}<br>{{allmember.name | limitTo : 5}}
+		                        </td>
+		                    </tr>
+		                </tbody>
+		            </table>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- 登陆会员Modal -->
+			<div id="addMemberModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog modal-sm">
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">登陆会员</h4>
+			      </div>
+			      <div class="modal-body">
+			          <div class="input-group">
+			              <input type="text" class="form-control" ng-model="newMemberName" maxlength="20" placeholder="会员姓名">
+			              <span class="input-group-btn"><button class="btn btn-success" ng-click="addMember()">登陆</button></span>
+			          </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button id="addMemberModalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+            <table border="0" style="table-layout:fixed">
+                <tbody>
+                    <tr ng-repeat="memberRow in memberArr">
+                        <td ng-repeat="member in memberRow" style="padding:5px 5px 5px 5px;width:90px;overflow: hidden">
+                            <button class="btn btn-info btn-block" ng-click="autoInput(member.id)">{{member.id}}<br>{{member.name | limitTo : 5}}</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <button class="btn btn-success" ng-click="backClear()">清除上一个</button>
+                            <button class="btn btn-success" ng-click="matchClear()">清除所有</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+        <!-- main -->
+        <div class="col-md-8">
+            <div class="panel panel-info">
+                <div class="panel-heading">记分方法说明</div>
+                <div class="panel-body">
+                    <ul>
+                    <li>从左边最近参加活动会员一览里依次按下比赛胜者两人和败者两人名字的按键，或者直接输入胜者和败者的长城ID，然后输入比分，最后按下记分按键。</li>
+                    <li>如果最近参加活动会员一览没有会员，点击左上的显示所有会员按键，可查看其ID，然后直接输入到比赛胜者或者败者的文本框里。</li>
+                    <li>如果是新会员还没有登记，点击左上的新会员登陆按键，输入姓名后登陆，就可获得长城ID。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group row">
+			    <div class="col-md-4">
+			        <div>
+			            <h4><span class="label label-info">胜者组</span></h4>
+			        </div>
+			        <div class="input-group">
+			            <input class="form-control" type="number" class="form-control" ng-model="inputMatch.winner1" placeholder="胜者1">
+			            <span class="input-group-addon" style="min-width:120px;text-align:left">{{allMemberMap[inputMatch.winner1] | limitTo : 5}}</span>
+			        </div>
+			        <div class="input-group">
+			            <input class="form-control" type="number" class="form-control" ng-model="inputMatch.winner2" placeholder="胜者2">
+			            <span class="input-group-addon" style="min-width:120px;text-align:left">{{allMemberMap[inputMatch.winner2] | limitTo : 5}}</span>
+			        </div>
+			    </div>
+			    <div class="col-md-4">
+			        <div>
+			            <h4><span class="label label-info">败者组</span></h4>
+			        </div>
+			        <div class="input-group">
+			            <input class="form-control" type="number" class="form-control" ng-model="inputMatch.losser1" placeholder="败者1">
+			            <span class="input-group-addon" style="min-width:120px;text-align:left">{{allMemberMap[inputMatch.losser1] | limitTo : 5}}</span>
+			        </div>
+			        <div class="input-group">
+			            <input class="form-control" type="number" class="form-control" ng-model="inputMatch.losser2" placeholder="败者2">
+			            <span class="input-group-addon" style="min-width:120px;text-align:left">{{allMemberMap[inputMatch.losser2] | limitTo : 5}}</span>
+			        </div>
+			    </div>
+			    <div class="col-md-2">
+			         <div>
+			            <h4><span class="label label-info">比分</span></h4>
+			        </div>
+			        <div><select class="form-control" ng-model="inputMatch.win_score" ng-options="x for x in scoreArr" ng-init="inputMatch.win_score=21"></select></div>
+			        <div><select class="form-control" ng-model="inputMatch.loss_score" ng-options="x for x in scoreArr.slice(0,30)" ng-change="autoSetWinScore()" ng-init="inputMatch.loss_score=17"></select></div>
+			    </div>
+			    <div class="col-md-2">
+			        <div>
+			            <h4><span class="label label-info">操作</span></h4>
+			        </div>
+			        <div style="height:10px"></div>
+			        <button class="btn btn-success btn-block" style="height:45px" ng-click="matchInput()">记分</button>
+			        <div style="height:10px"></div>
+			    </div>
+			</div>
+			<!-- 败者分数Modal -->
+			<div id="lossScoreModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title"><span style="font-size:large;font-weight: bold">败者</span>得分</h4>
+			      </div>
+			      <div class="modal-body">
+			        <select size="15" class="form-control" ng-model="inputMatch.loss_score" ng-options="x for x in scoreArr.slice(0,30)" ng-change="autoSetWinScore()" ng-init="inputMatch.loss_score=17"></select>
+			      </div>
+			      <div class="modal-footer">
+			        <button id="lossScoreModalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                    <th width="5%">No</th>
+                    <th width="15%">胜者1</th>
+                    <th width="15%">胜者2</th>
+                    <th width="15%">败者1</th>
+                    <th width="15%">败者2</th>
+                    <th width="15%">比分</th>
+                    <th width="7%">积分</th>
+                    <th width="13%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="todayMatch in todayMatches" ng-include="getTemplate(todayMatch)">
+                </tbody>
+            </table>
+            <script type="text/ng-template" id="display">
+                        <td>
+                            {{$index+1}}
+                        </td>
+                        <td>
+                            {{todayMatch.winner1}}<br>{{allMemberMap[todayMatch.winner1] | limitTo : 5}}
+                        </td>
+                        <td>
+                            {{todayMatch.winner2}}<br>{{allMemberMap[todayMatch.winner2] | limitTo : 5}}
+                        </td>
+                        <td>
+                            {{todayMatch.losser1}}<br>{{allMemberMap[todayMatch.losser1] | limitTo : 5}}
+                        </td>
+                        <td>
+                            {{todayMatch.losser2}}<br>{{allMemberMap[todayMatch.losser2] | limitTo : 5}}
+                        </td>
+                        <td>
+                            {{todayMatch.win_score}}:{{todayMatch.loss_score}}
+                        </td>
+                        <td>{{todayMatch.points}}</td>
+                        <td>
+                            <a href="" class="btn btn-success btn-xs" ng-click="matchEdit(todayMatch)">修改</a>
+                            <a href="" class="btn btn-success btn-xs" ng-click="matchDelete(todayMatch)">删除</a>
+                        </td>
+            </script>
+            <script type="text/ng-template" id="edit">
+                        <td>
+                            {{$index+1}}
+                        </td>
+                        <td>
+                            <div>
+                                <input type="number" class="form-control" ng-model="selectedTodayMatch.winner1">
+                                <label>{{allMemberMap[selectedTodayMatch.winner1] | limitTo : 5}}</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="number" class="form-control" ng-model="selectedTodayMatch.winner2">
+                                <label>{{allMemberMap[selectedTodayMatch.winner2] | limitTo : 5}}</label>                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="number" class="form-control" ng-model="selectedTodayMatch.losser1">
+                                <label>{{allMemberMap[selectedTodayMatch.losser1] | limitTo : 5}}</label>                            </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="number" class="form-control" ng-model="selectedTodayMatch.losser2">
+                                <label>{{allMemberMap[selectedTodayMatch.losser2] | limitTo : 5}}</label>                            </div>
+                            </div>
+                        </td>
+                        <td>
+                            <input class="form-control" type="number" class="form-control" ng-model="selectedTodayMatch.win_score" min="21" max="30">
+                            <input class="form-control" type="number" class="form-control" ng-model="selectedTodayMatch.loss_score" min="0" max="29">
+                        </td>
+                        <td>{{selectedTodayMatch.points}}</td>
+                        <td>
+                            <a href="" class="btn btn-success btn-xs" ng-click="matchSave($index)">保存</a>
+                            <a href="" class="btn btn-success btn-xs" ng-click="reset()">取消</a>
+                        </td>
+            </script>
+        </div>
+</div>

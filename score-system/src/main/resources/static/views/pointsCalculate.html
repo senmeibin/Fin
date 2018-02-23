@@ -1,0 +1,38 @@
+<h3>　　　</h3><!-- 第一行不能显示 原因不明 -->
+<h3 align="center">比赛积分计算</h3>
+<div ng-show="!authkeyObj.adminAuth"><h2>没有权限</h2></div>
+<div class="row" ng-show="authkeyObj.adminAuth" ng-init="init()" style="max-width:660px;padding:15px;margin:0 auto;">
+    <div class="panel panel-info">
+        <div class="panel-heading">说明</div>
+        <div class="panel-body">
+            <div>按计算积分按钮可以计算从上次积分计算日期开始未计算的比赛积分。<br>可修改上次积分计算日期重新计算积分。
+            <br>只能修改到到今天为止90天以内的日期。</div>
+            <br>
+            <table border="0" class="table">
+                <tbody>
+                    <tr>
+                         <td width="40%">上次积分计算日期</td>
+                         <td width="60%">{{lastBatchDateObj.value}}</td>
+                    </tr>
+                    <tr>
+                         <td>修改积分计算日期</td>
+                         <td>
+                             <div class="input-group">
+                                 <input type="number" class="form-control" placeholder="yyyyMMdd" ng-model="lastBatchDateInput" min="0" max="99999999">
+                                 <span class="input-group-btn">
+                                     <button class="btn btn-info" ng-click="editLastBatchDate()">修改</button>
+                                 </span>
+                             </div>
+                         </td>
+                    </tr>
+                    <tr>
+                       <td></td><td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <button class="btn btn-success" ng-click="caculatePoint()">比赛积分计算</button>
+            </div>
+        </div>
+    </div>
+</div>

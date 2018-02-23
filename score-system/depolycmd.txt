@@ -1,0 +1,4 @@
+sudo nohup java -Dserver.port=80 -jar scoreSystem-1.0.0.jar&
+
+
+jdbc:h2:file:./workdb

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.gwb.service.PointServiceTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.406 sec - in com.gwb.service.PointServiceTest
